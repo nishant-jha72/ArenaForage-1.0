@@ -3,7 +3,7 @@ import type { User } from '../types/user'
 
 export interface RegisterPayload {
   username: string
-  phoneNumber: Number
+  phone: number
   email: string
   password: string
 }

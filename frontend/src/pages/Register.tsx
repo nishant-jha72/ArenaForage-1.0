@@ -29,7 +29,7 @@ export default function Register() {
     const handle = setTimeout(async () => {
       try {
         const { available } = await checkUsernameAvailable(username.trim())
-        setUsernameStatus(available ? 'available' : 'taken')
+        setUsernameStatus(available ? 'taken' : 'available')
       } catch {
         setUsernameStatus('idle')
       }
@@ -48,8 +48,8 @@ export default function Register() {
 
     setIsSubmitting(true)
     try {
-      await register({ username: username.trim(), email , phoneNumber: parseInt(phoneNumber), password })
-      navigate('/', { replace: true })
+      await register({ username: username.trim(), email , phone: parseInt(phoneNumber), password })
+      navigate('/login', { replace: true })
     } catch (err) {
       setError(getApiErrorMessage(err, 'Could not create your account. Please try again.'))
     } finally {

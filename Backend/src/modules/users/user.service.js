@@ -53,10 +53,15 @@ class UserService {
     await userRepository.updatePassword(userId, passwordHash);
   }
 
-  async checkUsernameAvailability(username) {
-    const existing = await userRepository.findByUsername(username);
-    return { available: !existing };
+async checkUsernameAvailability(username) {
+  const existing = await userRepository.findByUsername(username);
+
+  if (!existing || existing.length === 0) {
+    return { available: true };
   }
+
+  return { available: false };
+}
 
   async getAllUsers(query) {
     const result = await userRepository.findAll({
