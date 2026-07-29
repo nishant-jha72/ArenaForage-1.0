@@ -84,3 +84,18 @@
     scroll-behavior: auto !important;
   }
 }
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  @apply bg-crystal-surface text-ink-900 dark:bg-ink-900 dark:text-slate-100 transition-colors duration-300;
+}

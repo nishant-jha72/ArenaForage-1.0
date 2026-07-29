@@ -22,16 +22,28 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+  const prevScrollY = React.useRef(0);
   const { theme, toggleTheme } = useTheme();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   const navigate = useNavigate();
+
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
+      const currentY = window.scrollY;
+      const scrollingDown = currentY > prevScrollY.current;
+
+      // Mark as scrolled (compact mode) once past 20px
+      setIsScrolled(currentY > 20);
+
+      // Hide when scrolling down past 80px; show when scrolling up
+      if (currentY > 80) {
+        setIsHidden(scrollingDown);
       } else {
-        setIsScrolled(false);
+        setIsHidden(false);
       }
+
+      prevScrollY.current = currentY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -59,15 +71,17 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out border-b ${
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ease-out ${
         isScrolled
           ? "bg-[#0B0B0C]/90 backdrop-blur-xl border-white/10 shadow-2xl py-0"
           : "bg-[#0B0B0C]/75 backdrop-blur-md border-white/5 py-1"
+      } ${
+        isHidden ? "-translate-y-full" : "translate-y-0"
       }`}
     >
       <nav
         aria-label="Main Navigation"
-        className={`mx-auto flex w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
+        className={`flex w-full items-center justify-between pl-4 pr-6 transition-all duration-300 ${
           isScrolled ? "h-16" : "h-20"
         }`}
       >

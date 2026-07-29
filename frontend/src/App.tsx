@@ -13,7 +13,6 @@ import ResetPassword from './pages/ResetPassword'
 import Profile from './pages/Profile'
 import TournamentDetail from './pages/TournamentDetails'
 import { useAuth } from './context/AuthContext'
-
 function HomeRoute() {
   const { isAuthenticated, isLoading } = useAuth()
   // Avoid a flash of the marketing page while we check for a stored session.
@@ -28,7 +27,7 @@ export default function App() {
   return (
     <div className="flex flex-col bg-white dark:bg-ink-900">
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 pt-20">
         <Routes>
           <Route path="/" element={<HomeRoute />} />
           <Route path="/tournaments" element={<Tournaments />} />

@@ -12,7 +12,7 @@ export default function Host() {
   }
 
   return (
-    <section className="w-full px-4 py-12 sm:px-6 lg:px-8">
+    <section className="w-full max-w-7xl mx-auto flex-1 flex flex-col px-4 py-12 sm:px-6 lg:px-8">
       <h1 className="font-display text-3xl font-bold text-ink-900 sm:text-4xl dark:text-white">
         Host a tournament
       </h1>

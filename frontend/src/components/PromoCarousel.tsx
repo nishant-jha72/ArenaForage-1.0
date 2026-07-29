@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Trophy, CalendarDays, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react'
 import { useTournamentAds } from '../hooks/useTournamentAds'

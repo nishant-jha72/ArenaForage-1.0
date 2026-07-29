@@ -9,7 +9,7 @@ export default function DashboardHome() {
 
   return (
     <>
-      <section className="w-full bg-white dark:bg-ink-900 pt-16 sm:pt-20">
+      <section className="w-full bg-white dark:bg-ink-900 pt-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
           <h1 className="font-display text-2xl font-bold text-ink-900 sm:text-3xl dark:text-white">
             Welcome back{user ? `, ${user.username}` : ''}

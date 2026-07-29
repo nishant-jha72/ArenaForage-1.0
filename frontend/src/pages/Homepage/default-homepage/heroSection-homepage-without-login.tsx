@@ -14,7 +14,7 @@ export const HeroSection: React.FC<HeroProps> = ({
 }) => {
   return (
     <section 
-      className="w-full min-h-[calc(100vh-80px)] relative flex flex-col justify-center items-end text-right p-6 sm:p-12 lg:p-16 overflow-hidden border-b border-[#EA580C]/20 group"
+      className="w-full min-h-[calc(100vh-5rem)] relative flex flex-col justify-center items-end text-right p-6 sm:p-12 lg:p-16 overflow-hidden border-b border-[#EA580C]/20 group"
       aria-label="Hero Section"
     >
       {/* Background Image Layer */}
