@@ -26,7 +26,7 @@ function HomeRoute() {
 
 export default function App() {
   return (
-    <div className="flex  flex-col bg-white dark:bg-ink-900">
+    <div className="flex flex-col bg-white dark:bg-ink-900">
       <Navbar />
       <main className="flex-1">
         <Routes>
