@@ -1,5 +1,5 @@
 import { useTournamentAds } from '../hooks/useTournamentAds'
-import TournamentAdCard from '../components/TournamentAdCard'
+import TournamentAdCard from '../components/tournament/TournamentAdCard'
 import { tournamentDialogue as d } from '../theme/tournament.dialogue'
 
 export default function Tournaments() {

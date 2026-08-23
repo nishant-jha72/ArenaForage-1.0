@@ -195,9 +195,9 @@ export const HomepageAd: React.FC<HomepageAdProps> = ({
   autoSlideInterval = 4500,
   className = "",
 }) => {
-  const finalVideoId = youtubeVideoId || import.meta.env.ENV_YOUTUBE_VIDEO_ID;
+  const finalVideoId = youtubeVideoId || ENV_YOUTUBE_VIDEO_ID;
   const finalPlaceholderImage =
-    placeholderImage || import.meta.env.ENV_PLACEHOLDER_IMAGE;
+    placeholderImage || ENV_PLACEHOLDER_IMAGE;
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");

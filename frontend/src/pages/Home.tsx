@@ -1,6 +1,6 @@
-import HeroSection from "./heroSection-homepage-without-login";
-import HomepageAd from "./homepage-ad-section";
-import PromoSection from "./advertisement-without-login";
+import HeroSection from "../components/home/HeroSection";
+import HomepageAd from "../components/home/HomepageAd";
+import PromoSection from "../components/home/PromoSection";
 export default function Home() {
   return (
     <div className="w-full bg-black">
