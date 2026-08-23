@@ -8,7 +8,7 @@ export default function Home() {
         <HeroSection />
       </section>
       <section id="testimonials">
-        <HomepageAd/>
+        <HomepageAd />
       </section>
       <section id="promo">
         <PromoSection />

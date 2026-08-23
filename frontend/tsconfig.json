@@ -16,6 +16,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/pages/Homepage/default-homepage/homepage-ad-section.tsx"],
+  "include": ["src", "src/pages/homepage-ad-section.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
