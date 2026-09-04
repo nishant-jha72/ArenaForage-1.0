@@ -29,7 +29,7 @@ export default function Register() {
     const handle = setTimeout(async () => {
       try {
         const { available } = await checkUsernameAvailable(username.trim())
-        setUsernameStatus(available ? 'taken' : 'available')
+        setUsernameStatus(available ? 'available' : 'taken')
       } catch {
         setUsernameStatus('idle')
       }
@@ -48,7 +48,12 @@ export default function Register() {
 
     setIsSubmitting(true)
     try {
-      await register({ username: username.trim(), email , phone: parseInt(phoneNumber), password })
+      await register({
+        username: username.trim(),
+        email: email.trim(),
+        phone: phoneNumber.trim() || undefined,
+        password,
+      })
       navigate('/login', { replace: true })
     } catch (err) {
       setError(getApiErrorMessage(err, 'Could not create your account. Please try again.'))
@@ -127,12 +132,12 @@ export default function Register() {
 
           <div>
             <label htmlFor="phoneNumber" className="block text-sm font-semibold text-ink-900 dark:text-white">
-              Phone Number
+              Phone Number (Optional)
             </label>
             <input
               id="phoneNumber"
-              type="number"
-              required
+              type="tel"
+              placeholder="+91 9876543210"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               className="mt-2 w-full rounded-lg border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-amber-500 focus:outline-none dark:border-white/15 dark:bg-ink-900 dark:text-white dark:focus:border-amber-500"

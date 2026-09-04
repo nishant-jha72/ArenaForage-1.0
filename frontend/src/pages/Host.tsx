@@ -1,129 +1,214 @@
 import { useState, type FormEvent } from 'react'
-import { Loader2, CheckCircle2 } from 'lucide-react'
+import { Loader2, CheckCircle2, Trophy, ShieldAlert, PlusCircle } from 'lucide-react'
 
 export default function Host() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle')
+  const [game, setGame] = useState('freefire')
+  const [format, setFormat] = useState('squad')
+  const [title, setTitle] = useState('')
+  const [prize, setPrize] = useState('')
+  const [entryFee, setEntryFee] = useState('200')
+  const [date, setDate] = useState('')
+  const [description, setDescription] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setError(null)
+
+    if (!title.trim() || !prize || !date) {
+      setError('Please complete all required fields.')
+      return
+    }
+
+    if (Number(prize) < 0) {
+      setError('Prize pool cannot be negative.')
+      return
+    }
+
     setStatus('submitting')
-    // Replace with: await fetch('/api/tournaments', { method: 'POST', body: ... })
-    setTimeout(() => setStatus('success'), 1200)
+    setTimeout(() => {
+      setStatus('success')
+    }, 1000)
+  }
+
+  function handleReset() {
+    setStatus('idle')
+    setTitle('')
+    setPrize('')
+    setEntryFee('200')
+    setDate('')
+    setDescription('')
+    setError(null)
   }
 
   return (
-    <section className="w-full max-w-7xl mx-auto flex-1 flex flex-col px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="font-display text-3xl font-bold text-ink-900 sm:text-4xl dark:text-white">
-        Host a tournament
-      </h1>
-      <p className="mt-2 text-sm text-ink-700 dark:text-slate-400">
-        Fill in your tournament details and we'll list it once it's approved.
-      </p>
-
-      {status === 'success' ? (
-        <div className="mt-8 flex flex-col items-center gap-3 rounded-xl border border-brand-blue/20 bg-brand-blue/5 p-10 text-center dark:border-brand-cyan/20 dark:bg-brand-cyan/5">
-          <CheckCircle2 size={36} className="text-brand-blue dark:text-brand-cyan" />
-          <h2 className="font-display text-xl font-bold text-ink-900 dark:text-white">
-            Submitted for review
-          </h2>
-          <p className="max-w-sm text-sm text-ink-700 dark:text-slate-400">
-            We'll email you once your tournament is approved and live on the tournaments page.
+    <div className="w-full min-h-[calc(100vh-5rem)] bg-neutral-950 text-white py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto space-y-8">
+        
+        {/* Page Header */}
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-black uppercase tracking-wider">
+            <Trophy size={14} />
+            Organizer Portal
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
+            Host Your Tournament
+          </h1>
+          <p className="text-sm text-neutral-400">
+            Submit your Free Fire or PUBG tournament details. Once reviewed by our admin team, your event will go live on the official tournament board.
           </p>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <div>
-              <label htmlFor="game" className="block text-sm font-semibold text-ink-900 dark:text-white">
-                Game
-              </label>
-              <select
-                id="game"
-                required
-                className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:focus:border-brand-cyan"
+
+        {status === 'success' ? (
+          <div className="rounded-3xl border border-emerald-500/30 bg-emerald-500/10 p-8 sm:p-12 text-center space-y-4">
+            <CheckCircle2 size={48} className="mx-auto text-emerald-400" />
+            <h2 className="text-2xl font-black uppercase tracking-tight text-white">
+              Tournament Submitted for Approval
+            </h2>
+            <p className="max-w-md mx-auto text-sm text-neutral-300">
+              Thank you for hosting on Arena Forage! Your listing <span className="font-bold text-white">"{title}"</span> is now in the review queue. We will notify you once live.
+            </p>
+            <div className="pt-4">
+              <button
+                onClick={handleReset}
+                className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-black uppercase tracking-wider text-black hover:bg-amber-400 transition-all cursor-pointer shadow-lg shadow-amber-500/20"
               >
-                <option value="freefire">Free Fire</option>
-                <option value="pubg">PUBG Mobile</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="format" className="block text-sm font-semibold text-ink-900 dark:text-white">
-                Format
-              </label>
-              <select
-                id="format"
-                required
-                className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:focus:border-brand-cyan"
-              >
-                <option value="solo">Solo</option>
-                <option value="duo">Duo</option>
-                <option value="squad">Squad</option>
-              </select>
+                <PlusCircle size={18} />
+                Host Another Event
+              </button>
             </div>
           </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-neutral-900/90 p-6 sm:p-10 space-y-6 shadow-2xl backdrop-blur-xl">
+            
+            {error && (
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-xs font-semibold text-red-400 flex items-center gap-2">
+                <ShieldAlert size={16} />
+                {error}
+              </div>
+            )}
 
-          <div>
-            <label htmlFor="title" className="block text-sm font-semibold text-ink-900 dark:text-white">
-              Tournament name
-            </label>
-            <input
-              id="title"
-              type="text"
-              required
-              placeholder="e.g. Booyah Nights — Solo Sniper Cup"
-              className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 placeholder:text-ink-700/40 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-brand-cyan"
-            />
-          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="game" className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
+                  Esports Game Title <span className="text-red-400">*</span>
+                </label>
+                <select
+                  id="game"
+                  value={game}
+                  onChange={(e) => setGame(e.target.value)}
+                  className="w-full rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white focus:border-amber-500 focus:outline-none"
+                >
+                  <option value="freefire">Free Fire</option>
+                  <option value="pubg">PUBG Mobile</option>
+                </select>
+              </div>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <label htmlFor="format" className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
+                  Match Format <span className="text-red-400">*</span>
+                </label>
+                <select
+                  id="format"
+                  value={format}
+                  onChange={(e) => setFormat(e.target.value)}
+                  className="w-full rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white focus:border-amber-500 focus:outline-none"
+                >
+                  <option value="solo">Solo</option>
+                  <option value="duo">Duo</option>
+                  <option value="squad">Squad</option>
+                </select>
+              </div>
+            </div>
+
             <div>
-              <label htmlFor="prize" className="block text-sm font-semibold text-ink-900 dark:text-white">
-                Prize pool (₹)
+              <label htmlFor="title" className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
+                Tournament Title / Name <span className="text-red-400">*</span>
               </label>
               <input
-                id="prize"
-                type="number"
-                min={0}
+                id="title"
+                type="text"
                 required
-                placeholder="50000"
-                className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 placeholder:text-ink-700/40 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-brand-cyan"
+                placeholder="e.g. Booyah Nights — Solo Sniper Cup"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white placeholder:text-neutral-600 focus:border-amber-500 focus:outline-none"
               />
             </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div>
+                <label htmlFor="prize" className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
+                  Prize Pool (₹) <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="prize"
+                  type="number"
+                  min={0}
+                  required
+                  placeholder="50000"
+                  value={prize}
+                  onChange={(e) => setPrize(e.target.value)}
+                  className="w-full rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white placeholder:text-neutral-600 focus:border-amber-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="entryFee" className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
+                  Entry Fee (₹)
+                </label>
+                <input
+                  id="entryFee"
+                  type="text"
+                  placeholder="200 or Free"
+                  value={entryFee}
+                  onChange={(e) => setEntryFee(e.target.value)}
+                  className="w-full rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white placeholder:text-neutral-600 focus:border-amber-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="date" className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
+                  Match Date <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="date"
+                  type="date"
+                  required
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white focus:border-amber-500 focus:outline-none"
+                />
+              </div>
+            </div>
+
             <div>
-              <label htmlFor="date" className="block text-sm font-semibold text-ink-900 dark:text-white">
-                Date
+              <label htmlFor="desc" className="block text-xs font-bold uppercase tracking-wider text-neutral-300 mb-2">
+                Rules &amp; Description
               </label>
-              <input
-                id="date"
-                type="date"
-                required
-                className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:focus:border-brand-cyan"
+              <textarea
+                id="desc"
+                rows={4}
+                placeholder="Specify map rotation, point system, lobby check-in requirements..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white placeholder:text-neutral-600 focus:border-amber-500 focus:outline-none"
               />
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="desc" className="block text-sm font-semibold text-ink-900 dark:text-white">
-              Rules & description
-            </label>
-            <textarea
-              id="desc"
-              rows={4}
-              placeholder="Map rotation, point system, check-in time..."
-              className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 placeholder:text-ink-700/40 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-brand-cyan"
-            />
-          </div>
+            <button
+              type="submit"
+              disabled={status === 'submitting'}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-amber-500 py-3.5 text-sm font-black uppercase tracking-wider text-black hover:bg-amber-400 disabled:opacity-60 transition-all cursor-pointer shadow-lg shadow-amber-500/20"
+            >
+              {status === 'submitting' && <Loader2 size={16} className="animate-spin" />}
+              {status === 'submitting' ? 'Submitting Tournament…' : 'Submit Tournament for Listing'}
+            </button>
+          </form>
+        )}
 
-          <button
-            type="submit"
-            disabled={status === 'submitting'}
-            className="flex w-full items-center justify-center gap-2 rounded-md bg-brand-blue py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-hover disabled:opacity-70 dark:bg-brand-cyan dark:text-ink-900 dark:hover:bg-brand-cyan/80"
-          >
-            {status === 'submitting' && <Loader2 size={16} className="animate-spin" />}
-            {status === 'submitting' ? 'Submitting…' : 'Submit tournament'}
-          </button>
-        </form>
-      )}
-    </section>
+      </div>
+    </div>
   )
 }

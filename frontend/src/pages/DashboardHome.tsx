@@ -1,30 +1,50 @@
-import { useAuth } from '../context/AuthContext'
-import PromoCarousel from '../components/home/PromoCarousel'
-import TournamentBrowseSection from '../components/tournament/TournamentBrowseSection'
-import HostSection from '../components/home/HostSection'
-import PastTournamentsSection from '../components/home/PastTournamentSection'
+import DashboardStatsBar from "../components/dashboard/DashboardStatsBar";
+import PromoCarousel from "../components/home/PromoCarousel";
+import TournamentBrowseSection from "../components/tournament/TournamentBrowseSection";
+import LeaderboardSection from "../components/dashboard/LeaderboardSection";
+import HostSection from "../components/home/HostSection";
+import PastTournamentsSection from "../components/home/PastTournamentSection";
 
 export default function DashboardHome() {
-  const { user } = useAuth()
-
   return (
-    <>
-      <section className="w-full bg-white dark:bg-ink-900 pt-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-          <h1 className="font-display text-2xl font-bold text-ink-900 sm:text-3xl dark:text-white">
-            Welcome back{user ? `, ${user.username}` : ''}
-          </h1>
-          <p className="mt-1 text-sm text-ink-700 dark:text-slate-400">
-            Here's what's happening across Free Fire &amp; PUBG right now.
-          </p>
-        </div>
-        <div className="mt-6 w-full overflow-hidden">
-          <PromoCarousel />
-        </div>
+    <div className="w-full min-h-[calc(100vh-5rem)] bg-neutral-950 text-white space-y-10 pb-16">
+      {/* 1. Top Command Center Banner & Stats Bar */}
+      <section className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16 pt-8">
+        <DashboardStatsBar />
       </section>
-      <TournamentBrowseSection />
-      <HostSection />
-      <PastTournamentsSection />
-    </>
-  )
+
+      {/* 2. Featured Live & High-Stakes Carousel */}
+      <section className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16">
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-xs font-black uppercase tracking-widest text-amber-400">
+            Featured Tournaments &amp; Major Qualifiers
+          </h2>
+          <span className="text-xs text-neutral-400 font-semibold">
+            Auto-updating
+          </span>
+        </div>
+        <PromoCarousel />
+      </section>
+
+      {/* 3. Main Tournament Discovery Hub */}
+      <section className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16">
+        <TournamentBrowseSection />
+      </section>
+
+      {/* 4. Weekly Hall of Fame & Leaderboard */}
+      <section className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16">
+        <LeaderboardSection />
+      </section>
+
+      {/* 5. Organizer Host Portal */}
+      <section className="w-full">
+        <HostSection />
+      </section>
+
+      {/* 6. Personal Match History */}
+      <section className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16">
+        <PastTournamentsSection />
+      </section>
+    </div>
+  );
 }

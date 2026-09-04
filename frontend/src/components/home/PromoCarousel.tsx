@@ -1,94 +1,102 @@
-import { useEffect, useRef, useState, useMemo, useCallback } from 'react'
-import { NavLink } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Trophy, CalendarDays, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react'
-import { useTournamentAds } from '../../hooks/useTournamentAds'
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Trophy,
+  CalendarDays,
+  ArrowRight,
+  ShieldAlert,
+  Sparkles,
+} from "lucide-react";
+import { useTournamentAds } from "../../hooks/useTournamentAds";
 
 export interface AdItem {
-  id: string | number
-  title: string
-  game: string
-  format: string
-  status?: 'live' | 'upcoming' | string
-  prizePool: string
-  date: string
-  slotsLeft?: number | string
-  accent?: string
+  id: string | number;
+  title: string;
+  game: string;
+  format: string;
+  status?: "live" | "upcoming" | string;
+  prizePool: string;
+  date: string;
+  slotsLeft?: number | string;
+  accent?: string;
 }
 
-const SLIDE_DURATION = 5000
+const SLIDE_DURATION = 5000;
 
 const GAME_LOGOS: Record<string, string> = {
-  'Free Fire': '/garena_freefire_logo.jpg',
-  PUBG: '/pubg_logo.png',
-  'PUBG Mobile': '/pubg_logo.png',
-}
+  "Free Fire": "/garena_freefire_logo.jpg",
+  PUBG: "/pubg_logo.png",
+  "PUBG Mobile": "/pubg_logo.png",
+};
 
 const MOCK_ADS: AdItem[] = [
   {
-    id: 'ff-championship-2026',
-    title: 'Free Fire World Series Qualifier 2026',
-    game: 'Free Fire',
-    format: 'Squads • Battle Royale',
-    status: 'live',
-    prizePool: '₹1,50,000',
-    date: 'Starts Today at 8:00 PM',
+    id: "ff-championship-2026",
+    title: "Free Fire World Series Qualifier 2026",
+    game: "Free Fire",
+    format: "Squads • Battle Royale",
+    status: "live",
+    prizePool: "₹1,50,000",
+    date: "Starts Today at 8:00 PM",
     slotsLeft: 4,
   },
   {
-    id: 'pubg-winter-showdown',
-    title: 'PUBG Masters Invitational',
-    game: 'PUBG',
-    format: 'Duo • Erangel Classic',
-    status: 'upcoming',
-    prizePool: '₹2,00,000',
-    date: 'Tomorrow at 6:00 PM',
+    id: "pubg-winter-showdown",
+    title: "PUBG Masters Invitational",
+    game: "PUBG",
+    format: "Duo • Erangel Classic",
+    status: "upcoming",
+    prizePool: "₹2,00,000",
+    date: "Tomorrow at 6:00 PM",
     slotsLeft: 12,
   },
-]
+];
 
 export default function PromoCarousel() {
-  const { ads: apiAds, isLoading, error } = useTournamentAds()
-  
-  const ads: AdItem[] = useMemo(() => {
-    if (apiAds && apiAds.length > 0) return apiAds
-    return MOCK_ADS
-  }, [apiAds])
+  const { ads: apiAds, isLoading, error } = useTournamentAds();
 
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const ads: AdItem[] = useMemo(() => {
+    if (apiAds && apiAds.length > 0) return apiAds;
+    return MOCK_ADS;
+  }, [apiAds]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const goNext = useCallback(() => {
-    if (ads.length <= 1) return
-    setActiveIndex((prev) => (prev + 1) % ads.length)
-  }, [ads.length])
+    if (ads.length <= 1) return;
+    setActiveIndex((prev) => (prev + 1) % ads.length);
+  }, [ads.length]);
 
   const goPrev = useCallback(() => {
-    if (ads.length <= 1) return
-    setActiveIndex((prev) => (prev - 1 + ads.length) % ads.length)
-  }, [ads.length])
+    if (ads.length <= 1) return;
+    setActiveIndex((prev) => (prev - 1 + ads.length) % ads.length);
+  }, [ads.length]);
 
   const goTo = (index: number) => {
-    setActiveIndex(index)
-  }
+    setActiveIndex(index);
+  };
 
   useEffect(() => {
     if (ads.length <= 1 || isPaused) {
-      if (timerRef.current) clearInterval(timerRef.current)
-      return
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
     }
 
     timerRef.current = setInterval(() => {
-      goNext()
-    }, SLIDE_DURATION)
+      goNext();
+    }, SLIDE_DURATION);
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
-    }
-  }, [ads.length, isPaused, goNext])
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [ads.length, isPaused, goNext]);
 
   const renderGameBrand = (gameName: string) => {
-    const logoUrl = GAME_LOGOS[gameName]
+    const logoUrl = GAME_LOGOS[gameName];
 
     return (
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 border border-white/10 shadow-inner backdrop-blur-md">
@@ -102,13 +110,13 @@ export default function PromoCarousel() {
             className="h-4 w-4 rounded-full object-cover border border-white/20 shrink-0"
             loading="eager"
             onError={(e) => {
-              ;(e.target as HTMLImageElement).style.display = 'none'
+              (e.target as HTMLImageElement).style.display = "none";
             }}
           />
         )}
       </div>
-    )
-  }
+    );
+  };
 
   if (isLoading) {
     return (
@@ -118,7 +126,7 @@ export default function PromoCarousel() {
           <span>Loading Tournaments...</span>
         </div>
       </div>
-    )
+    );
   }
 
   if (error && ads.length === 0) {
@@ -126,37 +134,36 @@ export default function PromoCarousel() {
       <div className="w-full flex h-64 sm:h-72 flex-col items-center justify-center gap-3 border-y border-white/10 bg-[#0B0B0C] p-6 text-center shadow-2xl">
         <ShieldAlert className="w-8 h-8 text-amber-500" />
         <p className="text-sm font-extrabold uppercase tracking-wider text-neutral-300">
-          {error ?? 'No tournaments available right now.'}
+          {error ?? "No tournaments available right now."}
         </p>
       </div>
-    )
+    );
   }
 
-  const active = ads[activeIndex] || ads[0]
+  const active = ads[activeIndex] || ads[0];
 
   return (
     <section
       aria-label="Promotional Tournaments Carousel"
-      className="w-full m-0 p-0 overflow-hidden"
+      className="w-full overflow-hidden"
     >
       <div
-        className="group relative w-full overflow-hidden bg-[#0B0B0C] border-y border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.8)] transition-all duration-300"
+        className="group relative w-full overflow-hidden rounded-3xl bg-neutral-900/90 border border-white/10 shadow-2xl backdrop-blur-xl transition-all duration-300"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         {/* Background Ambient Glows */}
         <div
-          className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-amber-500/10 blur-3xl pointer-events-none"
+          className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-amber-500/10 blur-3xl pointer-events-none transform-gpu"
           aria-hidden="true"
         />
         <div
-          className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-amber-500/5 blur-3xl pointer-events-none"
+          className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-amber-500/5 blur-3xl pointer-events-none transform-gpu"
           aria-hidden="true"
         />
 
         {/* Inner Content Padding */}
         <div className="relative w-full min-h-[260px] sm:min-h-[290px] p-6 sm:p-10 lg:p-12 flex flex-col justify-between z-10">
-          
           {/* Card Top Row */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
@@ -167,7 +174,7 @@ export default function PromoCarousel() {
               </span>
             </div>
 
-            {active.status === 'live' && (
+            {active.status === "live" && (
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 backdrop-blur-md">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
                 <span className="text-xs font-black uppercase tracking-widest text-red-400">
@@ -248,8 +255,8 @@ export default function PromoCarousel() {
                 onClick={() => goTo(i)}
                 className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                   i === activeIndex
-                    ? 'w-8 bg-amber-500 shadow-[0_0_8px_rgba(217,119,6,0.8)]'
-                    : 'w-2 bg-white/20 hover:bg-white/40'
+                    ? "w-8 bg-amber-500 shadow-[0_0_8px_rgba(217,119,6,0.8)]"
+                    : "w-2 bg-white/20 hover:bg-white/40"
                 }`}
               />
             ))}
@@ -257,5 +264,5 @@ export default function PromoCarousel() {
         )}
       </div>
     </section>
-  )
+  );
 }

@@ -6,8 +6,8 @@ import type { GameTitle, TournamentStatus } from '../types/tournament'
 
 export const tournamentDialogue = {
   page: {
-    shell: 'w-full max-w-7xl mx-auto flex-1 flex flex-col px-4 py-12 sm:px-6 lg:px-8',
-    shellNarrow: 'flex w-full flex-1 min-h-[calc(100vh-5rem)] flex-col items-center justify-center px-4 py-12 text-center sm:px-6',
+    shell: 'w-full max-w-[1920px] mx-auto flex-1 flex flex-col px-4 sm:px-8 lg:px-12 2xl:px-16 py-12',
+    shellNarrow: 'flex w-full max-w-[1920px] mx-auto flex-1 min-h-[calc(100vh-5rem)] flex-col items-center justify-center px-4 sm:px-8 lg:px-12 py-12 text-center',
     header: 'mb-8',
     title: 'font-display text-3xl font-bold text-ink-900 sm:text-4xl dark:text-white',
     sectionTitle: 'font-display text-2xl font-bold text-ink-900 sm:text-3xl dark:text-white',
@@ -39,7 +39,7 @@ export const tournamentDialogue = {
   },
 
   layout: {
-    cardGrid: 'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3',
+    cardGrid: 'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
     metaGrid: 'mt-4 grid grid-cols-3 gap-2 text-center',
     filterBar: 'flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4',
     sectionHeader:

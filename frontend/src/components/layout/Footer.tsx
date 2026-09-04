@@ -16,21 +16,21 @@ export default function Footer() {
 
       {/* Ambient background glows for esports depth */}
       <div
-        className="absolute -top-24 left-1/4 w-96 h-96 rounded-full blur-[100px] pointer-events-none opacity-20"
+        className="absolute -top-24 left-1/4 w-96 h-96 rounded-full blur-[100px] pointer-events-none opacity-20 transform-gpu"
         style={{
           background: "radial-gradient(circle, #fbbf24 0%, transparent 70%)",
         }}
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full blur-[90px] pointer-events-none opacity-15"
+        className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full blur-[90px] pointer-events-none opacity-15 transform-gpu"
         style={{
           background: "radial-gradient(circle, #f97316 0%, transparent 70%)",
         }}
         aria-hidden="true"
       />
 
-      <div className="relative z-10 w-full px-6 py-14 sm:px-12 lg:px-16 sm:py-16 lg:py-20">
+      <div className="relative z-10 w-full max-w-[1920px] mx-auto px-6 sm:px-8 lg:px-12 2xl:px-16 py-14 sm:py-16 lg:py-20">
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">

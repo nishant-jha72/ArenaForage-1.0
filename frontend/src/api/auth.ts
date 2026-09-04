@@ -1,16 +1,16 @@
-import { apiClient } from './client'
-import type { User } from '../types/user'
+import { apiClient } from "./client";
+import type { User } from "../types/user";
 
 export interface RegisterPayload {
-  username: string
-  phone: number
-  email: string
-  password: string
+  username: string;
+  phone?: string;
+  email: string;
+  password: string;
 }
 
 export interface LoginPayload {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface AuthResponse {
@@ -27,48 +27,52 @@ export interface AuthResponse {
 
 /** POST /auth/register — 201 Created, 400 validation failed, 409 duplicate email/username */
 export function registerUser(payload: RegisterPayload) {
-  return apiClient.post<User>('/auth/register', payload).then((res) => res.data)
+  return apiClient
+    .post<User>("/auth/register", payload)
+    .then((res) => res.data);
 }
 
 /** POST /auth/login */
 export function loginUser(payload: LoginPayload) {
-  return apiClient.post<AuthResponse>('/auth/login', payload).then((res) => res.data)
+  return apiClient
+    .post<AuthResponse>("/auth/login", payload)
+    .then((res) => res.data);
 }
 
 /** POST /auth/logout */
 export function logoutUser(refreshToken: string) {
-  return apiClient.post('/auth/logout', { refreshToken })
+  return apiClient.post("/auth/logout", { refreshToken });
 }
 
 /** POST /auth/forgot-password */
 export function forgotPassword(email: string) {
-  return apiClient.post('/auth/forgot-password', { email })
+  return apiClient.post("/auth/forgot-password", { email });
 }
 
 /** POST /auth/reset-password */
 export function resetPassword(token: string, password: string) {
-  return apiClient.post('/auth/reset-password', { token, password })
+  return apiClient.post("/auth/reset-password", { token, password });
 }
 
 /** Shared API envelope used by the backend ApiResponse helper. */
 interface ApiEnvelope<T> {
-  success: boolean
-  message: string
-  data: T
+  success: boolean;
+  message: string;
+  data: T;
 }
 
 /** GET /users/me — requires bearer token */
 export function getCurrentUser() {
   return apiClient
-    .get<ApiEnvelope<User>>('/users/me')
-    .then((res) => res.data.data)
+    .get<ApiEnvelope<User>>("/users/me")
+    .then((res) => res.data.data);
 }
 
 /** GET /users/check-username?username=... — debounce 300–500ms on the caller side */
 export function checkUsernameAvailable(username: string) {
   return apiClient
-    .get<ApiEnvelope<{ available: boolean }>>('/users/check-username', {
+    .get<ApiEnvelope<{ available: boolean }>>("/users/check-username", {
       params: { username },
     })
-    .then((res) => res.data.data)
+    .then((res) => res.data.data);
 }

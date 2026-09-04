@@ -22,7 +22,7 @@ const PERKS = [
 export default function HostSection() {
   return (
     <section className="clip-panel-rev bg-brand-navy py-16 text-white sm:py-20">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
           <div>
             <span className="inline-flex w-fit items-center gap-2 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-cyan">
