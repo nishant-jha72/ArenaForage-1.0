@@ -1,12 +1,37 @@
 import { useState, type FormEvent } from 'react'
 import { Mail, MessageSquare, MapPin } from 'lucide-react'
+import { submitContactMessage } from '../api/contact'
+import { getApiErrorMessage } from '../api/errors'
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSent(true)
+    setError(null)
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const name = (formData.get('name') as string).trim()
+    const email = (formData.get('email') as string).trim()
+    const message = (formData.get('message') as string).trim()
+
+    if (!name || !email || !message) {
+      setError('Please complete all fields.')
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      await submitContactMessage({ name, email, message })
+      setSent(true)
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Something went wrong. Please try again later.'))
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -57,6 +82,11 @@ export default function Contact() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
+              {error && (
+                <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm font-semibold text-red-500">
+                  {error}
+                </div>
+              )}
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="block text-sm font-semibold text-ink-900 dark:text-white">
@@ -64,6 +94,7 @@ export default function Contact() {
                   </label>
                   <input
                     id="name"
+                    name="name"
                     type="text"
                     required
                     className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:focus:border-brand-cyan"
@@ -75,6 +106,7 @@ export default function Contact() {
                   </label>
                   <input
                     id="email"
+                    name="email"
                     type="email"
                     required
                     className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:focus:border-brand-cyan"
@@ -87,6 +119,7 @@ export default function Contact() {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={5}
                   required
                   className="mt-2 w-full rounded-md border border-ink-900/15 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-brand-blue dark:border-white/15 dark:bg-ink-800 dark:text-white dark:focus:border-brand-cyan"
@@ -94,9 +127,10 @@ export default function Contact() {
               </div>
               <button
                 type="submit"
-                className="w-full rounded-md bg-brand-blue py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-hover sm:w-auto sm:px-8 dark:bg-brand-cyan dark:text-ink-900 dark:hover:bg-brand-cyan/80"
+                disabled={isSubmitting}
+                className="w-full rounded-md bg-brand-blue py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-hover disabled:opacity-60 sm:w-auto sm:px-8 dark:bg-brand-cyan dark:text-ink-900 dark:hover:bg-brand-cyan/80"
               >
-                Send message
+                {isSubmitting ? 'Sending…' : 'Send message'}
               </button>
             </form>
           )}

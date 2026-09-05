@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Loader2, CheckCircle2, Trophy, ShieldAlert, PlusCircle } from 'lucide-react'
+import { submitTournamentForHosting } from '../api/host'
+import { getApiErrorMessage } from '../api/errors'
 
 export default function Host() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle')
@@ -12,7 +14,7 @@ export default function Host() {
   const [description, setDescription] = useState('')
   const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
 
@@ -27,9 +29,21 @@ export default function Host() {
     }
 
     setStatus('submitting')
-    setTimeout(() => {
+    try {
+      await submitTournamentForHosting({
+        game,
+        format,
+        title: title.trim(),
+        prizePool: prize,
+        entryFee,
+        date,
+        description: description.trim() || undefined,
+      })
       setStatus('success')
-    }, 1000)
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Failed to submit tournament. Please try again.'))
+      setStatus('idle')
+    }
   }
 
   function handleReset() {

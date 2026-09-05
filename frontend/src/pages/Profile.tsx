@@ -15,6 +15,8 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { usePastTournaments } from '../hooks/usePastTournaments'
+import { changePassword } from '../api/profile'
+import { getApiErrorMessage } from '../api/errors'
 
 export default function Profile() {
   const { user, logout } = useAuth()
@@ -24,6 +26,7 @@ export default function Profile() {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [passMessage, setPassMessage] = useState<string | null>(null)
+  const [passError, setPassError] = useState<string | null>(null)
   const [isUpdatingPass, setIsUpdatingPass] = useState(false)
 
   // Calculate career statistics from match history
@@ -31,22 +34,27 @@ export default function Profile() {
   const totalKills = history.reduce((sum, item) => sum + (item.kills || 0), 0)
   const totalPrizes = history.filter((item) => item.prizeWon !== '—').length
 
-  function handlePasswordChange(e: React.FormEvent) {
+  async function handlePasswordChange(e: React.FormEvent) {
     e.preventDefault()
     setPassMessage(null)
+    setPassError(null)
 
     if (!oldPassword || !newPassword) {
-      setPassMessage('Please complete all password fields.')
+      setPassError('Please complete all password fields.')
       return
     }
 
     setIsUpdatingPass(true)
-    setTimeout(() => {
-      setIsUpdatingPass(false)
+    try {
+      await changePassword({ oldPassword, newPassword })
       setPassMessage('Password updated successfully.')
       setOldPassword('')
       setNewPassword('')
-    }, 800)
+    } catch (err) {
+      setPassError(getApiErrorMessage(err, 'Failed to update password. Please try again.'))
+    } finally {
+      setIsUpdatingPass(false)
+    }
   }
 
   return (
@@ -217,9 +225,16 @@ export default function Profile() {
             </h2>
 
             {passMessage && (
-              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs font-semibold text-amber-400 flex items-center gap-2">
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-xs font-semibold text-emerald-400 flex items-center gap-2">
                 <CheckCircle2 size={16} />
                 {passMessage}
+              </div>
+            )}
+
+            {passError && (
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-xs font-semibold text-red-400 flex items-center gap-2">
+                <Shield size={16} />
+                {passError}
               </div>
             )}
 

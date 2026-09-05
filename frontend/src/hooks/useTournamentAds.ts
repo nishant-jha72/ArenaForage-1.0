@@ -1,58 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { TournamentAd } from '../types/tournament'
-import { gameAccent, tournamentDialogue } from '../theme/tournament.dialogue'
-
-/**
- * In production this calls your backend, e.g.:
- *   const res = await fetch('/api/tournaments/featured')
- *   const data: TournamentAd[] = await res.json()
- *
- * The shape below is what the API is expected to return, so swapping
- * the mock for a real fetch is a one-line change.
- */
-async function fetchFeaturedTournaments(): Promise<TournamentAd[]> {
-  await new Promise((resolve) => setTimeout(resolve, 600))
-  const accents = tournamentDialogue.accentVariants
-
-  return [
-    {
-      id: 't-ff-001',
-      game: 'FreeFire',
-      title: 'Arena Forage — FreeFire Squad Showdown',
-      prizePool: '₹1,50,000',
-      date: 'July 26, 2026',
-      slotsLeft: 12,
-      status: 'live',
-      accent: gameAccent('FreeFire'),
-      format: 'Squad',
-      entryFee: '₹200',
-    },
-    {
-      id: 't-pubg-014',
-      game: 'PUBG',
-      title: 'Chicken Dinner Championship — Season 4',
-      prizePool: '₹2,00,000',
-      date: 'August 2, 2026',
-      slotsLeft: 28,
-      status: 'registration-open',
-      accent: gameAccent('PUBG'),
-      format: 'Squad',
-      entryFee: '₹300',
-    },
-    {
-      id: 't-ff-002',
-      game: 'FreeFire',
-      title: 'Booyah Nights — Solo Sniper Cup',
-      prizePool: '₹75,000',
-      date: 'August 9, 2026',
-      slotsLeft: 40,
-      status: 'upcoming',
-      accent: accents[2],
-      format: 'Solo',
-      entryFee: 'Free',
-    },
-  ]
-}
+import { getFeaturedTournaments } from '../api/tournaments'
 
 interface UseTournamentAdsResult {
   ads: TournamentAd[]
@@ -68,7 +16,7 @@ export function useTournamentAds(): UseTournamentAdsResult {
   useEffect(() => {
     let cancelled = false
 
-    fetchFeaturedTournaments()
+    getFeaturedTournaments()
       .then((data) => {
         if (!cancelled) setAds(data)
       })

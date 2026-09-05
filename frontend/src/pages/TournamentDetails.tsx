@@ -15,6 +15,8 @@ import {
 import { useAllTournaments } from '../hooks/useAllTournaments'
 import { useAuth } from '../context/AuthContext'
 import type { TournamentAd } from '../types/tournament'
+import { registerForTournament } from '../api/tournaments'
+import { getApiErrorMessage } from '../api/errors'
 
 export default function TournamentDetail() {
   const { id } = useParams<{ id: string }>()
@@ -46,7 +48,7 @@ export default function TournamentDetail() {
       : undefined
   )
 
-  function handleRegisterSubmit(e: React.FormEvent) {
+  async function handleRegisterSubmit(e: React.FormEvent) {
     e.preventDefault()
     setRegError(null)
 
@@ -60,11 +62,23 @@ export default function TournamentDetail() {
       return
     }
 
+    if (!id) {
+      setRegError('Tournament ID is missing.')
+      return
+    }
+
     setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
+    try {
+      await registerForTournament(id, {
+        inGameId: inGameId.trim(),
+        squadName: squadName.trim() || undefined,
+      })
       setRegistered(true)
-    }, 800)
+    } catch (err) {
+      setRegError(getApiErrorMessage(err, 'Registration failed. Please try again.'))
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (isLoading) {

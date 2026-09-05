@@ -31,35 +31,11 @@ const GAME_LOGOS: Record<string, string> = {
   "PUBG Mobile": "/pubg_logo.png",
 };
 
-const MOCK_ADS: AdItem[] = [
-  {
-    id: "ff-championship-2026",
-    title: "Free Fire World Series Qualifier 2026",
-    game: "Free Fire",
-    format: "Squads • Battle Royale",
-    status: "live",
-    prizePool: "₹1,50,000",
-    date: "Starts Today at 8:00 PM",
-    slotsLeft: 4,
-  },
-  {
-    id: "pubg-winter-showdown",
-    title: "PUBG Masters Invitational",
-    game: "PUBG",
-    format: "Duo • Erangel Classic",
-    status: "upcoming",
-    prizePool: "₹2,00,000",
-    date: "Tomorrow at 6:00 PM",
-    slotsLeft: 12,
-  },
-];
-
 export default function PromoCarousel() {
   const { ads: apiAds, isLoading, error } = useTournamentAds();
 
   const ads: AdItem[] = useMemo(() => {
-    if (apiAds && apiAds.length > 0) return apiAds;
-    return MOCK_ADS;
+    return apiAds && apiAds.length > 0 ? apiAds : [];
   }, [apiAds]);
 
   const [activeIndex, setActiveIndex] = useState(0);
