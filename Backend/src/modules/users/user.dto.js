@@ -11,5 +11,6 @@ module.exports = {
     return safe;
   },
 
-  toUserListResponse: (users) => users.map((user) => module.exports.toUserResponse(user)),
+  toUserListResponse: (users) =>
+    users.map((user) => module.exports.toUserResponse(user)),
 };
